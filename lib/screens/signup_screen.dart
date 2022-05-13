@@ -103,7 +103,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 new GestureDetector(
                   onTap: () {},
                   child: new Container(
-                    child: new Text("Log in"),
+                    child: new Text("Sign up"),
                     width: double.infinity,
                     alignment: Alignment.center,
                     padding: new EdgeInsets.symmetric(vertical: 12),
@@ -126,14 +126,14 @@ class _SignupScreenState extends State<SignupScreen> {
                   children: [
                     new Container(
                       padding: new EdgeInsets.symmetric(vertical: 8),
-                      child: new Text("Don't have an account?"),
+                      child: new Text("Already have an account?"),
                     ),
                     new GestureDetector(
                       onTap: () {},
                       child: new Container(
                         padding: new EdgeInsets.symmetric(vertical: 8),
                         child: new Text(
-                          "Sign up.",
+                          "Log in",
                           style: new TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),

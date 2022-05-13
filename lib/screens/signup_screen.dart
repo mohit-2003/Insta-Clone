@@ -4,20 +4,24 @@ import 'package:insta_clone/widgets/my_text_field.dart';
 
 import '../utils/colors.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passController = new TextEditingController();
+  final TextEditingController _usernameController = new TextEditingController();
+  final TextEditingController _bioController = new TextEditingController();
   @override
   void dispose() {
     _emailController.dispose();
     _passController.dispose();
+    _usernameController.dispose();
+    _bioController.dispose();
     super.dispose();
   }
 
@@ -43,6 +47,33 @@ class _LoginScreenState extends State<LoginScreen> {
                 new SizedBox(
                   height: 64,
                 ),
+                // for profile
+                new Stack(
+                  children: [
+                    new CircleAvatar(
+                      radius: 60,
+                      backgroundImage: new NetworkImage(
+                          "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"),
+                    ),
+                    new Positioned(
+                      child: new IconButton(
+                          onPressed: () {}, icon: new Icon(Icons.add_a_photo)),
+                      left: 80,
+                      bottom: -10,
+                    )
+                  ],
+                ),
+                new SizedBox(
+                  height: 24,
+                ),
+                // for user name
+                new MyTextField(
+                    textEditingController: _usernameController,
+                    hintText: "Enter Your Username",
+                    keyboardType: TextInputType.text),
+                new SizedBox(
+                  height: 24,
+                ),
                 // for email
                 new MyTextField(
                     textEditingController: _emailController,
@@ -58,6 +89,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.text,
                   isPass: true,
                 ),
+                new SizedBox(
+                  height: 24,
+                ),
+                // for bio
+                new MyTextField(
+                    textEditingController: _bioController,
+                    hintText: "Enter Your Bio",
+                    keyboardType: TextInputType.text),
                 new SizedBox(
                   height: 24,
                 ),

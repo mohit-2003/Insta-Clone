@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:insta_clone/screens/signup_screen.dart';
 import 'package:insta_clone/widgets/my_text_field.dart';
 
+import '../resources/auth_methods.dart';
 import '../utils/colors.dart';
+import '../utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -14,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passController = new TextEditingController();
+  bool _isLoading = false;
   @override
   void dispose() {
     _emailController.dispose();
@@ -62,9 +66,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 24,
                 ),
                 new GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    loginUser();
+                  },
                   child: new Container(
-                    child: new Text("Log in"),
+                    child: _isLoading
+                        ? new Center(
+                            child: new CircularProgressIndicator(
+                            color: primaryColor,
+                            strokeWidth: 3.0,
+                          ))
+                        : new Text("Log in"),
                     width: double.infinity,
                     alignment: Alignment.center,
                     padding: new EdgeInsets.symmetric(vertical: 12),
@@ -90,7 +102,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: new Text("Don't have an account?"),
                     ),
                     new GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                          builder: (context) => new SignupScreen(),
+                        ));
+                      },
                       child: new Container(
                         padding: new EdgeInsets.symmetric(vertical: 8),
                         child: new Text(
@@ -105,5 +121,24 @@ class _LoginScreenState extends State<LoginScreen> {
             )),
       ),
     );
+  }
+
+  void loginUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await new AuthMethods().loginUser(
+        email: _emailController.text, password: _passController.text);
+
+    setState(() {
+      _isLoading = false;
+    });
+    if (res == "success") {
+      // succesfully sign up
+      showSnackbar(context, res);
+    } else {
+      // showing error
+      showSnackbar(context, res);
+    }
   }
 }

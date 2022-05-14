@@ -1,5 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:insta_clone/resources/auth_methods.dart';
+import 'package:insta_clone/screens/login_screen.dart';
+import 'package:insta_clone/utils/utils.dart';
 import 'package:insta_clone/widgets/my_text_field.dart';
 
 import '../utils/colors.dart';
@@ -16,6 +22,8 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passController = new TextEditingController();
   final TextEditingController _usernameController = new TextEditingController();
   final TextEditingController _bioController = new TextEditingController();
+  Uint8List? _profileImage;
+  bool _isLoading = false;
   @override
   void dispose() {
     _emailController.dispose();
@@ -50,14 +58,22 @@ class _SignupScreenState extends State<SignupScreen> {
                 // for profile
                 new Stack(
                   children: [
-                    new CircleAvatar(
-                      radius: 60,
-                      backgroundImage: new NetworkImage(
-                          "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"),
-                    ),
+                    _profileImage == null
+                        ? new CircleAvatar(
+                            radius: 60,
+                            backgroundImage: new NetworkImage(
+                                "https://deejayfarm.com/wp-content/uploads/2019/10/Profile-pic.jpg"),
+                          )
+                        : new CircleAvatar(
+                            radius: 60,
+                            backgroundImage: new MemoryImage(_profileImage!),
+                          ),
                     new Positioned(
                       child: new IconButton(
-                          onPressed: () {}, icon: new Icon(Icons.add_a_photo)),
+                          onPressed: () {
+                            selectImage();
+                          },
+                          icon: new Icon(Icons.add_a_photo)),
                       left: 80,
                       bottom: -10,
                     )
@@ -101,9 +117,17 @@ class _SignupScreenState extends State<SignupScreen> {
                   height: 24,
                 ),
                 new GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    signupUser();
+                  },
                   child: new Container(
-                    child: new Text("Sign up"),
+                    child: _isLoading
+                        ? new Center(
+                            child: new CircularProgressIndicator(
+                            color: primaryColor,
+                            strokeWidth: 3.0,
+                          ))
+                        : new Text("Sign up"),
                     width: double.infinity,
                     alignment: Alignment.center,
                     padding: new EdgeInsets.symmetric(vertical: 12),
@@ -129,7 +153,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: new Text("Already have an account?"),
                     ),
                     new GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                          builder: (context) => new LoginScreen(),
+                        ));
+                      },
                       child: new Container(
                         padding: new EdgeInsets.symmetric(vertical: 8),
                         child: new Text(
@@ -144,5 +172,34 @@ class _SignupScreenState extends State<SignupScreen> {
             )),
       ),
     );
+  }
+
+  void selectImage() async {
+    Uint8List image = await pickImage(ImageSource.gallery);
+    setState(() {
+      _profileImage = image;
+    });
+  }
+
+  void signupUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await new AuthMethods().signupUser(
+        email: _emailController.text,
+        password: _passController.text,
+        bio: _bioController.text,
+        username: _usernameController.text,
+        profilImage: _profileImage!);
+
+    setState(() {
+      _isLoading = false;
+    });
+    if (res == "success") {
+      // succesfully sign up
+    } else {
+      // showing error
+      showSnackbar(context, res);
+    }
   }
 }

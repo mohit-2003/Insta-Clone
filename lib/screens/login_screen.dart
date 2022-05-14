@@ -6,6 +6,7 @@ import 'package:insta_clone/widgets/my_text_field.dart';
 import '../resources/auth_methods.dart';
 import '../utils/colors.dart';
 import '../utils/utils.dart';
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -135,7 +136,9 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     if (res == "success") {
       // succesfully sign up
-      showSnackbar(context, res);
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(
+        builder: (context) => new HomeScreen(),
+      ));
     } else {
       // showing error
       showSnackbar(context, res);

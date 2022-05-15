@@ -1,11 +1,82 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_clone/utils/colors.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currIndex = 0;
+  late PageController pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = new PageController();
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  void onNavigationItemTapped(int index) {
+    pageController.jumpToPage(index);
+  }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        body: new SafeArea(child: new Center(child: new Text("Home Screen"))));
+        bottomNavigationBar: new CupertinoTabBar(
+          currentIndex: _currIndex,
+          activeColor: primaryColor,
+          inactiveColor: secondaryColor,
+          backgroundColor: mobileBackgroundColor,
+          items: [
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.home),
+                label: null,
+                backgroundColor: primaryColor),
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.search),
+                label: null,
+                backgroundColor: primaryColor),
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.add_circle),
+                label: null,
+                backgroundColor: primaryColor),
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.favorite),
+                label: null,
+                backgroundColor: primaryColor),
+            new BottomNavigationBarItem(
+                icon: new Icon(Icons.person),
+                label: null,
+                backgroundColor: primaryColor),
+          ],
+          onTap: (value) => onNavigationItemTapped(value),
+        ),
+        body: new SafeArea(
+            child: new PageView(
+          physics: new NeverScrollableScrollPhysics(),
+          controller: pageController,
+          children: [
+            new Center(child: new Text("Home Screen")),
+            new Center(child: new Text("Search Screen")),
+            new Center(child: new Text("Add Screen")),
+            new Center(child: new Text("Favorite Screen")),
+            new Center(child: new Text("Profile Screen"))
+          ],
+          onPageChanged: (page) {
+            setState(() {
+              _currIndex = page;
+            });
+          },
+        )));
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_clone/providers/user_provider.dart';
+import 'package:insta_clone/screens/add_post_screen.dart';
 import 'package:insta_clone/utils/colors.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,6 +20,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     pageController = new PageController();
+    refreshUserDetails();
+  }
+
+  refreshUserDetails() async {
+    final UserProvider userProvider = Provider.of(context, listen: false);
+    await userProvider.refreshUser();
   }
 
   @override
@@ -68,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             new Center(child: new Text("Home Screen")),
             new Center(child: new Text("Search Screen")),
-            new Center(child: new Text("Add Screen")),
+            new AddPostScreen(),
             new Center(child: new Text("Favorite Screen")),
             new Center(child: new Text("Profile Screen"))
           ],

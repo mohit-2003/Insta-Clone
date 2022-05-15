@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class StorageMethods {
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
@@ -16,6 +17,10 @@ class StorageMethods {
         .ref()
         .child(childName)
         .child(_firebaseAuth.currentUser!.uid);
+
+    if (isPost) {
+      ref = ref.child(new Uuid().v1());
+    }
     UploadTask uploadTask = ref.putData(file);
 
     TaskSnapshot snapshot = await uploadTask;

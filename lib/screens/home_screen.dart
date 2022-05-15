@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:insta_clone/utils/colors.dart';
@@ -26,7 +27,23 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {}, icon: new Icon(Icons.messenger_outline))
         ],
       ),
-      body: new PostLayout(),
+      body: new StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("posts").snapshots(),
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return new Center(
+                child: new CircularProgressIndicator(
+              color: primaryColor,
+            ));
+          }
+          return new ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) =>
+                new PostLayout(data: snapshot.data!.docs[index].data()),
+          );
+        },
+      ),
     );
   }
 }

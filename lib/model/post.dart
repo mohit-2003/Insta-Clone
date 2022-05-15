@@ -8,7 +8,7 @@ class Post {
   final String datePublished;
   final String postUrl;
   final String profileImg;
-  final String likes;
+  final List likes;
 
   const Post(
       {required this.username,

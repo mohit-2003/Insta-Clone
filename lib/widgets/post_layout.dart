@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:insta_clone/utils/colors.dart';
 
 class PostLayout extends StatelessWidget {
-  const PostLayout({Key? key}) : super(key: key);
+  final Map<String, dynamic> data;
+  const PostLayout({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +17,7 @@ class PostLayout extends StatelessWidget {
           child: new Row(children: [
             new CircleAvatar(
               radius: 16,
-              backgroundImage: new NetworkImage(
-                  "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"),
+              backgroundImage: new NetworkImage(data["profileImg"]),
             ),
             new Expanded(
               child: new Padding(
@@ -27,7 +27,7 @@ class PostLayout extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     new Text(
-                      "User1",
+                      data["username"],
                       style: new TextStyle(fontWeight: FontWeight.bold),
                     )
                   ],
@@ -45,7 +45,7 @@ class PostLayout extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.35,
           width: double.infinity,
           child: new Image.network(
-            "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60",
+            data["postUrl"],
             fit: BoxFit.cover,
           ),
         ),
@@ -75,7 +75,7 @@ class PostLayout extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              new Text("8,596 likes",
+              new Text("${data["likes"].length} likes",
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2!
@@ -91,8 +91,8 @@ class PostLayout extends StatelessWidget {
                         children: [
                       new TextSpan(
                           style: new TextStyle(fontWeight: FontWeight.bold),
-                          text: "username"),
-                      new TextSpan(text: "  Discription")
+                          text: data["username"]),
+                      new TextSpan(text: "  ${data["description"]}")
                     ])),
               ),
               new InkWell(

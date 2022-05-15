@@ -27,7 +27,7 @@ class FirestoreDBMethods {
           datePublished: new DateTime.now().toString(),
           profileImg: profileImgUrl,
           postUrl: postUrl,
-          likes: "");
+          likes: []);
 
       _firestore.collection("posts").doc(postID).set(post.getMap());
       res = "success";

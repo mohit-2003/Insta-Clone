@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +7,14 @@ import 'package:insta_clone/resources/storage_methods.dart';
 class AuthMethods {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<model.User> getCurrentUserDetails() async {
+    User user = _firebaseAuth.currentUser!;
+    DocumentSnapshot snapshot =
+        await _firestore.collection("users").doc(user.uid).get();
+
+    return model.User.convertSnapToUser(snapshot);
+  }
 
   Future<String> signupUser(
       {required String email,

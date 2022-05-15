@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:insta_clone/providers/user_provider.dart';
+import 'package:insta_clone/resources/firestore_db_methods.dart';
 import 'package:insta_clone/utils/colors.dart';
+import 'package:insta_clone/widgets/like_animation.dart';
+import 'package:provider/provider.dart';
 
-class PostLayout extends StatelessWidget {
+import '../model/user.dart';
+
+class PostLayout extends StatefulWidget {
   final Map<String, dynamic> data;
   const PostLayout({Key? key, required this.data}) : super(key: key);
 
   @override
+  State<PostLayout> createState() => _PostLayoutState();
+}
+
+class _PostLayoutState extends State<PostLayout> {
+  bool isLikeBtnAnimating = false;
+  @override
   Widget build(BuildContext context) {
+    User user = Provider.of<UserProvider>(context).getUser;
     return new Container(
       padding: EdgeInsets.symmetric(vertical: 10),
       color: mobileBackgroundColor,
@@ -17,7 +30,7 @@ class PostLayout extends StatelessWidget {
           child: new Row(children: [
             new CircleAvatar(
               radius: 16,
-              backgroundImage: new NetworkImage(data["profileImg"]),
+              backgroundImage: new NetworkImage(widget.data["profileImg"]),
             ),
             new Expanded(
               child: new Padding(
@@ -27,7 +40,7 @@ class PostLayout extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     new Text(
-                      data["username"],
+                      widget.data["username"],
                       style: new TextStyle(fontWeight: FontWeight.bold),
                     )
                   ],
@@ -41,22 +54,64 @@ class PostLayout extends StatelessWidget {
             )
           ]),
         ),
-        new Container(
-          height: MediaQuery.of(context).size.height * 0.35,
-          width: double.infinity,
-          child: new Image.network(
-            data["postUrl"],
-            fit: BoxFit.cover,
-          ),
+        new GestureDetector(
+          onDoubleTap: () async {
+            await new FirestoreDBMethods().likePost(
+                user.uid, widget.data["postID"], widget.data["likes"]);
+
+            setState(() {
+              isLikeBtnAnimating = true;
+            });
+          },
+          child: new Stack(alignment: Alignment.center, children: [
+            new SizedBox(
+              height: MediaQuery.of(context).size.height * 0.35,
+              width: double.infinity,
+              child: new Image.network(
+                widget.data["postUrl"],
+                fit: BoxFit.cover,
+              ),
+            ),
+            new AnimatedOpacity(
+              duration: new Duration(milliseconds: 200),
+              opacity: isLikeBtnAnimating ? 1 : 0,
+              child: new LikeAnimator(
+                child: new Icon(
+                  Icons.favorite,
+                  color: primaryColor,
+                  size: 100,
+                ),
+                isAnimating: isLikeBtnAnimating,
+                isSmallLike: false,
+                duration: new Duration(milliseconds: 400),
+                onEnd: () {
+                  setState(() {
+                    isLikeBtnAnimating = false;
+                  });
+                },
+              ),
+            )
+          ]),
         ),
         new Row(
-          children: [
-            new IconButton(
-                onPressed: () {},
-                icon: new Icon(
-                  Icons.favorite,
-                  color: Colors.red,
-                )),
+          children: <Widget>[
+            new LikeAnimator(
+              isAnimating: widget.data["likes"].contains(user.uid),
+              isSmallLike: true,
+              child: new IconButton(
+                  onPressed: () async {
+                    await new FirestoreDBMethods().likePost(
+                        user.uid, widget.data["postID"], widget.data["likes"]);
+                  },
+                  icon: widget.data["likes"].contains(user.uid)
+                      ? new Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        )
+                      : new Icon(
+                          Icons.favorite_border,
+                        )),
+            ),
             new IconButton(
                 onPressed: () {}, icon: new Icon(Icons.comment_outlined)),
             new IconButton(onPressed: () {}, icon: new Icon(Icons.send)),
@@ -75,7 +130,7 @@ class PostLayout extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              new Text("${data["likes"].length} likes",
+              new Text("${widget.data["likes"].length} likes",
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2!
@@ -91,8 +146,8 @@ class PostLayout extends StatelessWidget {
                         children: [
                       new TextSpan(
                           style: new TextStyle(fontWeight: FontWeight.bold),
-                          text: data["username"]),
-                      new TextSpan(text: "  ${data["description"]}")
+                          text: widget.data["username"]),
+                      new TextSpan(text: "  ${widget.data["description"]}")
                     ])),
               ),
               new InkWell(

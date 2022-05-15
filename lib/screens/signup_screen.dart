@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:insta_clone/resources/auth_methods.dart';
-import 'package:insta_clone/screens/home_screen.dart';
+import 'package:insta_clone/screens/main_screen.dart';
 import 'package:insta_clone/screens/login_screen.dart';
 import 'package:insta_clone/utils/utils.dart';
 import 'package:insta_clone/widgets/my_text_field.dart';
@@ -201,7 +201,7 @@ class _SignupScreenState extends State<SignupScreen> {
     if (res == "success") {
       // succesfully sign up
       Navigator.of(context).pushReplacement(new MaterialPageRoute(
-        builder: (context) => new HomeScreen(),
+        builder: (context) => new MainScreen(),
       ));
     } else {
       // showing error

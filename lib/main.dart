@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:insta_clone/providers/user_provider.dart';
-import 'package:insta_clone/screens/home_screen.dart';
+import 'package:insta_clone/screens/main_screen.dart';
 import 'package:insta_clone/screens/login_screen.dart';
 import 'package:insta_clone/utils/colors.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           if (snapshot.hasData) {
-            return HomeScreen();
+            return MainScreen();
           } else if (snapshot.hasError) {
             return new Center(
               child: new Text("${snapshot.error}"),

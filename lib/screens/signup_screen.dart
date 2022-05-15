@@ -37,6 +37,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      resizeToAvoidBottomInset: false,
       body: new SafeArea(
         child: new Container(
             padding: new EdgeInsets.symmetric(horizontal: 32),
@@ -155,7 +156,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     new GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(new MaterialPageRoute(
+                        Navigator.of(context)
+                            .pushReplacement(new MaterialPageRoute(
                           builder: (context) => new LoginScreen(),
                         ));
                       },

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:insta_clone/model/user.dart' as model;
 import 'package:insta_clone/resources/storage_methods.dart';
 
 class AuthMethods {
@@ -26,16 +27,21 @@ class AuthMethods {
 
         UserCredential credential = await _firebaseAuth
             .createUserWithEmailAndPassword(email: email, password: password);
-        await _firestore.collection("users").doc(credential.user!.uid).set({
-          "username": username,
-          "email": email,
-          "password": password,
-          "bio": bio,
-          "uid": credential.user!.uid,
-          "profileImg": profileImgUrl,
-          "followers": [],
-          "following": []
-        });
+
+        model.User user = new model.User(
+            username: username,
+            email: email,
+            password: password,
+            bio: bio,
+            uid: credential.user!.uid,
+            profileImg: profileImgUrl,
+            followers: [],
+            following: []);
+
+        await _firestore
+            .collection("users")
+            .doc(credential.user!.uid)
+            .set(user.getMap());
         res = "success";
       } else {
         res = "Please enter all the fields";

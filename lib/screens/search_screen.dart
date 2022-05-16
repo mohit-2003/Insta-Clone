@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:insta_clone/screens/profile_screen.dart';
 import 'package:insta_clone/utils/colors.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
@@ -86,6 +87,12 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       return new ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (context) => new ProfileScreen(
+                                userID: snapshot.data!.docs[index]["uid"]),
+                          ));
+                        },
                         leading: new CircleAvatar(
                           backgroundImage: new NetworkImage(
                               snapshot.data!.docs[index]["profileImg"]),

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:insta_clone/model/comment.dart';
 import 'package:insta_clone/model/post.dart';
 import 'package:insta_clone/resources/storage_methods.dart';
 import 'package:uuid/uuid.dart';
@@ -50,6 +51,32 @@ class FirestoreDBMethods {
           "likes": FieldValue.arrayUnion([userID])
         });
       }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> postComment(
+      {required String userID,
+      required String username,
+      required String postID,
+      required String commentText,
+      required String profileImgUrl}) async {
+    try {
+      String commentID = new Uuid().v1();
+      Comment comment = new Comment(
+          username: username,
+          comment: commentText,
+          userID: userID,
+          commentID: commentID,
+          datePublished: new DateTime.now(),
+          profileImg: profileImgUrl);
+      await _firestore
+          .collection("posts")
+          .doc(postID)
+          .collection("comments")
+          .doc(commentID)
+          .set(comment.getMap());
     } catch (e) {
       print(e.toString());
     }

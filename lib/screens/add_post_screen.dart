@@ -80,6 +80,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       setState(() {
         _isLoading = false;
       });
+      _captionController.text = "";
     } catch (e) {
       showSnackbar(context, e.toString());
     }
@@ -104,12 +105,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
     return _imgFile == null
         ? new Center(
-            child: new IconButton(
-                onPressed: () {
-                  selectImage(context);
-                },
-                icon: new Icon(Icons.upload)),
-          )
+            child: new InkWell(
+                onTap: () => selectImage(context),
+                child: new Text(
+                  "Upload",
+                  style: new TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: blueColor),
+                )))
         : new Scaffold(
             appBar: new AppBar(
               backgroundColor: mobileBackgroundColor,
@@ -119,8 +123,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
               title: new Text("Post to"),
               actions: [
                 new TextButton(
-                    onPressed: () => postImageToServer(
-                        user.uid, user.username, user.profileImg),
+                    onPressed: () {
+                      postImageToServer(
+                          user.uid, user.username, user.profileImg);
+                    },
                     child: new Text("Post",
                         style: new TextStyle(
                             color: Colors.blueAccent,

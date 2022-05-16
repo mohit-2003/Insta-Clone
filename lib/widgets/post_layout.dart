@@ -154,16 +154,18 @@ class _PostLayoutState extends State<PostLayout> {
                 width: double.infinity,
                 padding: EdgeInsets.only(top: 8),
                 child: new RichText(
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     text: new TextSpan(
                         style: new TextStyle(
                           color: primaryColor,
                         ),
                         children: [
-                      new TextSpan(
-                          style: new TextStyle(fontWeight: FontWeight.bold),
-                          text: widget.data["username"]),
-                      new TextSpan(text: "  ${widget.data["description"]}")
-                    ])),
+                          new TextSpan(
+                              style: new TextStyle(fontWeight: FontWeight.bold),
+                              text: widget.data["username"]),
+                          new TextSpan(text: "  ${widget.data["description"]}")
+                        ])),
               ),
               new InkWell(
                 onTap: () {},

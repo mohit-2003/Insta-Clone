@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:insta_clone/providers/user_provider.dart';
 import 'package:insta_clone/screens/add_post_screen.dart';
 import 'package:insta_clone/screens/home_screen.dart';
+import 'package:insta_clone/screens/search_screen.dart';
 import 'package:insta_clone/utils/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -76,8 +77,8 @@ class _MainScreenState extends State<MainScreen> {
           physics: new NeverScrollableScrollPhysics(),
           controller: pageController,
           children: [
+            new SearchScreen(),
             new HomeScreen(),
-            new Center(child: new Text("Search Screen")),
             new AddPostScreen(),
             new Center(child: new Text("Favorite Screen")),
             new Center(child: new Text("Profile Screen"))

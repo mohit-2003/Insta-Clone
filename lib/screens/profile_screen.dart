@@ -121,29 +121,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderColor: Colors.grey,
                           textColor: primaryColor,
                           text: "Edit profile",
-                          function: () {})
+                          onPressed: () {})
                       : isFollowing
                           ? new FollowButton(
                               backgroungColor: mobileBackgroundColor,
                               borderColor: Colors.grey,
                               textColor: primaryColor,
                               text: "Following",
-                              function: () async {
+                              onPressed: () async {
                                 await new FirestoreDBMethods().followUser(
                                     userID:
                                         FirebaseAuth.instance.currentUser!.uid,
                                     followingID: userData["uid"]);
+                                setState(() {
+                                  isFollowing = !isFollowing;
+                                });
                               })
                           : new FollowButton(
                               backgroungColor: blueColor,
                               borderColor: Colors.transparent,
                               textColor: primaryColor,
                               text: "Follow",
-                              function: () async {
+                              onPressed: () async {
                                 await new FirestoreDBMethods().followUser(
                                     userID:
                                         FirebaseAuth.instance.currentUser!.uid,
                                     followingID: userData["uid"]);
+                                setState(() {
+                                  isFollowing = !isFollowing;
+                                });
                               },
                             ),
                   new Divider(

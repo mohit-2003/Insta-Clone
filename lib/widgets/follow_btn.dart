@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class FollowButton extends StatelessWidget {
-  final Function()? function;
+  final Function()? onPressed;
   final Color backgroungColor;
   final Color borderColor;
   final Color textColor;
   final String text;
   const FollowButton(
       {Key? key,
-      this.function,
+      this.onPressed,
       required this.backgroungColor,
       required this.borderColor,
       required this.textColor,
@@ -20,7 +20,7 @@ class FollowButton extends StatelessWidget {
     return new Container(
       margin: EdgeInsets.only(top: 8),
       child: new TextButton(
-          onPressed: function,
+          onPressed: onPressed,
           child: new Container(
             padding: EdgeInsets.all(8),
             alignment: Alignment.center,

@@ -6,6 +6,7 @@ import 'package:insta_clone/model/user.dart';
 import 'package:insta_clone/providers/user_provider.dart';
 import 'package:insta_clone/resources/firestore_db_methods.dart';
 import 'package:insta_clone/utils/colors.dart';
+import 'package:insta_clone/widgets/bottom_sheet.dart';
 import 'package:insta_clone/widgets/follow_btn.dart';
 import 'package:provider/provider.dart';
 
@@ -77,7 +78,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       FontAwesomeIcons.plus,
                     )),
                 new IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      new BottomSheets().menuBottomSheet(context);
+                    },
                     icon: new Icon(
                       Icons.menu,
                     ))
